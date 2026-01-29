@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/images/logo.svg" alt="Shine Spot Studio Logo" width="200"/>
+  <img src="public/images/logo-dark.svg" alt="Shine Spot Studio Logo" width="200"/>
 </p>
 
 <h1 align="center">✨ Shine Spot Admin Studio</h1>
