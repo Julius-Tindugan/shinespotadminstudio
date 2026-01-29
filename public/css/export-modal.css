@@ -1,0 +1,497 @@
+/**
+ * Export Modal Styles
+ * Enhanced UI/UX for export functionality with Mobile-First Responsive Design
+ * 
+ * Z-INDEX HIERARCHY:
+ * - Export Modal: 9999 (highest - must be above everything)
+ * - Sidebar (mobile): 50
+ * - Sidebar (desktop): 20  
+ * - Header: 5
+ * - Regular content: 0
+ */
+
+/* Ensure export buttons are always clickable */
+button[onclick*="openExportModal"] {
+    position: relative;
+    z-index: 10;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+}
+
+button[onclick*="openExportModal"]:hover {
+    transform: translateY(-2px);
+}
+
+button[onclick*="openExportModal"]:active {
+    transform: translateY(0);
+}
+
+/* Modal overlay - SIMPLE pointer-events handling */
+#exportReportModal {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 9999 !important;
+    isolation: isolate;
+    position: fixed;
+}
+
+/* When hidden, block all pointer events */
+#exportReportModal.hidden {
+    pointer-events: none !important;
+}
+
+/* When visible, allow pointer events ONLY on modal content */
+#exportReportModal:not(.hidden) {
+    pointer-events: auto !important;
+}
+
+/* Modal content and ALL children should be clickable */
+#exportReportModal .modal-content {
+    pointer-events: auto !important;
+}
+
+/* Critical: Make ALL elements inside modal clickable */
+#exportReportModal .modal-content,
+#exportReportModal .modal-content *,
+#exportReportModal label,
+#exportReportModal input,
+#exportReportModal button {
+    pointer-events: auto !important;
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+}
+
+/* Smooth transitions */
+#exportReportModal,
+#exportReportModal .modal-content {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Radio button animations */
+input[type="radio"][name="exportFormat"]:checked + * {
+    animation: pulse-once 0.3s ease-out;
+}
+
+@keyframes pulse-once {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Format selection cards */
+label.group {
+    transition: all 0.2s ease-in-out;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+label.group:hover {
+    transform: translateY(-2px);
+}
+
+label.group:active {
+    transform: translateY(0);
+}
+
+/* Make sure ALL labels in modal are clickable */
+#exportReportModal label {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent;
+    /* Minimum touch target size for accessibility (44x44px) */
+    min-height: 44px;
+}
+
+/* Make sure ALL inputs in modal are interactive */
+#exportReportModal input[type="radio"],
+#exportReportModal input[type="date"],
+#exportReportModal input {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Improve date input usability on mobile */
+#exportReportModal input[type="date"] {
+    /* Ensure date input is large enough to tap on mobile */
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
+}
+
+/* Ensure labels with cursor-pointer class work */
+label.cursor-pointer {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Touch-friendly buttons */
+#exportReportModal button {
+    min-height: 44px; /* Minimum touch target size */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation; /* Disable double-tap zoom */
+}
+
+/* Better touch manipulation class */
+.touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Fix z-index stacking for radio button indicators */
+label.relative {
+    position: relative;
+    isolation: isolate; /* Creates new stacking context */
+}
+
+/* Ensure checkmark indicators are always visible */
+label .absolute.z-10 {
+    z-index: 10 !important;
+    position: absolute !important;
+}
+
+/* Make sure peer-checked styles apply */
+input.peer:checked ~ .peer-checked\:border-accent {
+    border-color: hsl(var(--accent)) !important;
+}
+
+input.peer:checked ~ .peer-checked\:border-red-500 {
+    border-color: #ef4444 !important;
+    background-color: #ef4444 !important;
+}
+
+input.peer:checked ~ .peer-checked\:bg-red-500 {
+    background-color: #ef4444 !important;
+}
+
+input.peer:checked ~ .peer-checked\:border-green-500 {
+    border-color: #22c55e !important;
+    background-color: #22c55e !important;
+}
+
+input.peer:checked ~ .peer-checked\:bg-green-500 {
+    background-color: #22c55e !important;
+}
+
+input.peer:checked ~ .peer-checked\:border-blue-500 {
+    border-color: #3b82f6 !important;
+    background-color: #3b82f6 !important;
+}
+
+input.peer:checked ~ .peer-checked\:bg-blue-500 {
+    background-color: #3b82f6 !important;
+}
+
+/* Show checkmark icon when checked */
+input.peer:checked ~ * .peer-checked\:opacity-100 {
+    opacity: 1 !important;
+}
+
+/* Export button states */
+#exportButton {
+    position: relative;
+    overflow: hidden;
+}
+
+#exportButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+#exportButton:hover::before {
+    left: 100%;
+}
+
+#exportButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Success notification */
+.fixed.top-4.right-4 {
+    animation: slideInRight 0.3s ease-out;
+    z-index: 10001; /* Above modal content to show success message */
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Date input styling */
+input[type="date"] {
+    color-scheme: light;
+    font-size: 16px; /* Prevents auto-zoom on iOS */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    /* Make calendar icon larger on mobile */
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Mobile-First Responsive Adjustments */
+
+/* Extra small devices (phones, less than 375px) */
+@media (max-width: 374px) {
+    #exportReportModal .modal-content {
+        margin: 0.5rem;
+        max-height: 98vh;
+    }
+    
+    #exportReportModal .grid-cols-1 {
+        gap: 0.5rem;
+    }
+    
+    /* Reduce padding on very small screens */
+    #exportReportModal .modal-content > div {
+        padding: 0.75rem !important;
+    }
+}
+
+/* Small devices (phones, 375px and up) */
+@media (max-width: 639px) {
+    /* Modal takes nearly full screen on mobile */
+    #exportReportModal .modal-content {
+        max-width: calc(100vw - 1rem);
+        max-height: 95vh;
+        margin: 0.5rem;
+    }
+    
+    /* Format cards stack vertically */
+    #exportReportModal .grid-cols-3,
+    #exportReportModal .sm\\:grid-cols-3 {
+        grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+        gap: 0.75rem;
+    }
+    
+    /* Larger touch targets for format options */
+    #exportReportModal label[for^="format-"] {
+        min-height: 100px;
+        padding: 1rem;
+    }
+    
+    /* Date inputs stack vertically */
+    #exportReportModal .grid-cols-2,
+    #exportReportModal .sm\\:grid-cols-2 {
+        grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    }
+    
+    /* Footer buttons stack vertically */
+    #exportReportModal .flex.space-x-3 {
+        flex-direction: column-reverse;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    #exportReportModal .flex.space-x-3 button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Improve scrolling on mobile */
+    #exportReportModal .overflow-y-auto {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Make text more readable on small screens */
+    #exportReportModal .text-xs {
+        font-size: 0.75rem;
+        line-height: 1.2rem;
+    }
+}
+
+/* Medium devices (tablets, 640px and up) */
+@media (min-width: 640px) and (max-width: 767px) {
+    #exportReportModal .modal-content {
+        max-width: 90vw;
+        max-height: 90vh;
+    }
+    
+    /* 2-column layout for format options on tablets */
+    #exportReportModal .grid-cols-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+}
+
+/* Large devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+    #exportReportModal .grid-cols-3 {
+        gap: 0.75rem;
+    }
+    
+    #exportReportModal .modal-content {
+        max-height: 85vh;
+    }
+}
+
+/* Landscape orientation optimization for mobile devices */
+@media (max-width: 767px) and (orientation: landscape) {
+    #exportReportModal .modal-content {
+        max-height: 92vh;
+        overflow-y: auto;
+    }
+    
+    /* Reduce vertical spacing in landscape */
+    #exportReportModal .mb-4,
+    #exportReportModal .mb-6 {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    #exportReportModal .py-4,
+    #exportReportModal .py-5 {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+    }
+}
+
+/* Ensure modal is above all other elements */
+#exportReportModal {
+    z-index: 9999 !important;
+    isolation: isolate;
+    position: fixed;
+}
+
+/* Modal content should also have proper z-index */
+#exportReportModal .modal-content {
+    position: relative;
+    z-index: 10000;
+}
+
+/* Scrollbar styling for modal content */
+#exportReportModal .modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+#exportReportModal .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#exportReportModal .modal-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+#exportReportModal .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+input:focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 2px;
+}
+
+/* Prevent text selection on interactive elements */
+button,
+label.cursor-pointer {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Additional mobile-specific improvements */
+
+/* Prevent zoom on input focus for iOS */
+@media screen and (max-width: 767px) {
+    #exportReportModal input,
+    #exportReportModal select,
+    #exportReportModal textarea {
+        font-size: 16px !important; /* Prevents auto-zoom on iOS */
+    }
+}
+
+/* Safe area insets for notched devices (iPhone X, etc.) */
+@supports (padding: max(0px)) {
+    #exportReportModal .modal-content {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+}
+
+/* Improve performance on mobile */
+#exportReportModal,
+#exportReportModal .modal-content,
+#exportReportModal label,
+#exportReportModal button {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Dark mode support (if needed in future) */
+@media (prefers-color-scheme: dark) {
+    /* Add dark mode styles here if needed */
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    #exportReportModal,
+    #exportReportModal *,
+    #exportReportModal .modal-content {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

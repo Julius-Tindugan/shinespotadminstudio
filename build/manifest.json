@@ -1,0 +1,24 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-CvAFhrNg.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/css/dashboard-responsive.css": {
+    "file": "assets/dashboard-responsive-BixA31Xz.css",
+    "src": "resources/css/dashboard-responsive.css",
+    "isEntry": true,
+    "names": [
+      "dashboard-responsive.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-CsKmQ3lw.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}

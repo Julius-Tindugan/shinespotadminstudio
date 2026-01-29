@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 210 20% 98%;
+        --card-bg: 0 0% 100%;
+        --primary-text: 220 20% 10%;
+        --secondary-text: 220 10% 40%;
+        --border-color: 220 13% 91%;
+        --accent: 43 74% 49%;
+        --accent-hover: 43 90% 45%;
+        --accent-color: hsl(43 74% 49%); /* For inline CSS compatibility */
+        --danger: 0 72% 51%;
+        --success: 142 72% 29%;
+        --warning: 38 92% 50%;
+        --info: 200 98% 39%;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+    }
+
+    body {
+        color: hsl(var(--primary-text));
+        background-color: hsl(var(--background));
+        overflow-x: hidden;
+        position: relative;
+        min-height: 100vh;
+    }
+    
+    /* Prevent body scroll when sidebar is open on mobile */
+    body.sidebar-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+
+    ::selection {
+        background-color: hsl(var(--accent) / 0.2);
+        color: hsl(var(--primary-text));
+    }
+
+    /* Smooth transitions for sidebar user type */
+    #sidebar-user-type {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Fix dropdown arrow overlay on select elements */
+    select {
+        padding-right: 2.5rem !important;
+    }
+
+    /* Ensure proper padding for status select dropdowns */
+    .booking-status-select {
+        padding-right: 2rem !important;
+    }
+
+    /* Ensure proper padding for filter selects */
+    .booking-filters,
+    select[name="status"],
+    select[name="filter"] {
+        padding-right: 2.5rem !important;
+    }
+
+    /* Modal animations */
+    #deleteConfirmationModal:not(.hidden) .modal-content {
+        animation: modalSlideIn 0.3s ease-out forwards;
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    /* Fade in animation for alerts */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    /* Table row hover effects */
+    .table-row-hover:hover {
+        transform: translateX(2px);
+    }
+
+    /* Custom scrollbar styling */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: hsl(var(--background));
+        border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: hsl(var(--accent) / 0.3);
+        border-radius: 3px;
+        transition: background 0.2s;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: hsl(var(--accent) / 0.5);
+    }
+
+    /* Smooth scrollbar for tables */
+    .overflow-x-auto::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .overflow-x-auto::-webkit-scrollbar-track {
+        background: hsl(var(--background));
+        border-radius: 4px;
+    }
+
+    .overflow-x-auto::-webkit-scrollbar-thumb {
+        background: hsl(var(--border-color));
+        border-radius: 4px;
+    }
+
+    .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+        background: hsl(var(--secondary-text));
+    }
+}
+
+@layer components {
+    /* Modal styles */
+    .modal-backdrop {
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+    }
+
+    .modal-content {
+        max-height: calc(100vh - 4rem);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Smooth modal animations */
+    .modal-backdrop,
+    .modal-content {
+        will-change: transform, opacity;
+    }
+
+    /* Enhanced button styles for bookings page */
+    .btn-primary {
+        @apply relative overflow-hidden;
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-primary:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+@layer utilities {
+    /* Mobile-optimized touch interactions */
+    .touch-manipulation {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Prevent overscroll on mobile */
+    .overscroll-contain {
+        overscroll-behavior: contain;
+    }
+    
+    /* Safe area insets for mobile devices */
+    @supports (padding: max(0px)) {
+        .safe-top {
+            padding-top: max(1rem, env(safe-area-inset-top));
+        }
+        
+        .safe-bottom {
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+    }
+    
+    /* Mobile-specific animations */
+    @media (prefers-reduced-motion: reduce) {
+        #sidebar,
+        #mobile-sidebar-backdrop {
+            transition: none !important;
+        }
+    }
+}

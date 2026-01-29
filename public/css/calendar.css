@@ -1,0 +1,486 @@
+/* Switch Toggle */
+/* Updated: 2025-11-12 - Removed dark mode, added light theme overrides */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: hsl(var(--accent));
+}
+
+input:checked + .slider:before {
+  transform: translateX(14px);
+}
+
+/* Dark Mode & Light Mode Transitions */
+.fc, 
+.fc *, 
+.form-input, 
+.btn-primary, 
+.btn-secondary,
+.modal-content,
+.calendar-theme,
+.slot-item {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+}
+
+/* FullCalendar Overrides */
+.fc-theme-standard td, .fc-theme-standard th {
+  @apply border-border-color;
+}
+
+.fc .fc-toolbar-title {
+  @apply text-xl font-bold text-primary-text;
+}
+
+/* Navigation buttons (prev/next arrows) - Force light theme */
+.fc .fc-button-primary {
+  background-color: #ffffff !important;
+  border-color: hsl(var(--border-color)) !important;
+  color: hsl(var(--primary-text)) !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease;
+}
+
+.fc .fc-button-primary:not(:disabled):hover {
+  background-color: #f3f4f6 !important;
+  border-color: hsl(var(--accent)) !important;
+  color: hsl(var(--primary-text)) !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active, 
+.fc .fc-button-primary:not(:disabled):active {
+  background-color: hsl(var(--accent)) !important;
+  color: #ffffff !important;
+  border-color: hsl(var(--accent)) !important;
+  box-shadow: none !important;
+}
+
+.fc .fc-button-primary:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px hsl(var(--accent) / 0.2) !important;
+}
+
+/* Disabled state for navigation buttons */
+.fc .fc-button-primary:disabled {
+  background-color: #f3f4f6 !important;
+  color: #9ca3af !important;
+  border-color: #e5e7eb !important;
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+}
+
+/* Icon color inside buttons */
+.fc .fc-icon {
+  color: currentColor !important;
+}
+
+.fc-daygrid-day.fc-day-today {
+  @apply bg-accent/10;
+}
+
+.fc-event {
+  @apply cursor-pointer transition-opacity hover:opacity-90;
+}
+
+/* Fix text overflow in calendar events */
+.fc-event-main {
+  overflow: visible !important;
+  white-space: normal !important;
+}
+
+.fc-event-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  line-height: 1.3 !important;
+  padding: 2px 4px !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+}
+
+/* Ensure event content is fully visible */
+.fc-daygrid-event-harness {
+  margin-bottom: 2px !important;
+}
+
+.fc-daygrid-event {
+  white-space: normal !important;
+  padding: 3px 5px !important;
+  border-radius: 4px !important;
+  font-size: 0.75rem !important;
+  line-height: 1.3 !important;
+  min-height: auto !important;
+}
+
+/* Fix for day cell content */
+.fc-daygrid-day-frame {
+  min-height: 80px !important;
+  padding: 2px !important;
+}
+
+.fc-daygrid-day-events {
+  margin-top: 2px !important;
+}
+
+/* Ensure day number is always visible */
+.fc-daygrid-day-top {
+  padding: 4px !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+}
+
+.fc-daygrid-day-number {
+  padding: 4px 6px !important;
+  font-weight: 600 !important;
+}
+
+.fc-day-past {
+  @apply opacity-70;
+}
+
+.fc-theme-standard .fc-scrollgrid,
+.fc-theme-standard .fc-list {
+  @apply border-border-color;
+}
+
+.fc-col-header-cell {
+  @apply bg-background;
+}
+
+.fc-day-other .fc-daygrid-day-top {
+  @apply opacity-60;
+}
+
+/* Button variants */
+.btn-red {
+  @apply px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded shadow transition-colors duration-200;
+}
+
+.btn-green {
+  @apply px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded shadow transition-colors duration-200;
+}
+
+/* Slot item styles */
+.slot-item {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.slot-item:hover {
+  transform: translateX(4px);
+  background-color: hsl(var(--accent) / 0.05) !important;
+}
+
+.slot-item:not(:last-child) {
+  border-bottom: 1px solid hsl(var(--border-color) / 0.5);
+}
+
+/* Pulse animation for status indicators */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.slot-item .animate-pulse {
+  animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Progress bar animation */
+.slot-item .transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Status badge hover effect */
+.slot-item span[class*="bg-"] {
+  transition: all 0.2s ease;
+}
+
+.slot-item:hover span[class*="bg-green"] {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.slot-item:hover span[class*="bg-orange"] {
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.slot-item:hover span[class*="bg-red"] {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Custom scrollbar for slot list and other scrollable elements */
+.slots-container::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.slots-container::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded;
+}
+
+.slots-container::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded hover:bg-gray-500;
+}
+
+/* Calendar Theme Enhancements */
+.calendar-theme .fc {
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* Calendar header styling */
+.calendar-theme .fc-col-header-cell {
+  background: linear-gradient(to bottom, #f9fafb, #f3f4f6) !important;
+  font-weight: 700 !important;
+  font-size: 0.875rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.025em !important;
+  color: hsl(var(--primary-text)) !important;
+  padding: 12px 8px !important;
+  border-color: hsl(var(--border-color)) !important;
+}
+
+/* Day cell styling */
+.calendar-theme .fc-daygrid-day {
+  background: #ffffff !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.calendar-theme .fc-daygrid-day:hover {
+  background: #fafbfc !important;
+}
+
+/* Today's date highlight */
+.calendar-theme .fc-day-today {
+  background: linear-gradient(135deg, rgba(211, 159, 40, 0.08), rgba(211, 159, 40, 0.04)) !important;
+  border: 2px solid rgba(211, 159, 40, 0.3) !important;
+}
+
+.calendar-theme .fc-day-today .fc-daygrid-day-number {
+  background: hsl(var(--accent)) !important;
+  color: white !important;
+  border-radius: 50% !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 700 !important;
+}
+
+/* Weekend styling */
+.calendar-theme .fc-day-sat,
+.calendar-theme .fc-day-sun {
+  background: #fafafa !important;
+}
+
+/* Event styling improvements */
+.calendar-theme .fc-event {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+  transition: all 0.2s ease !important;
+  border-width: 1px !important;
+  margin: 1px 2px !important;
+}
+
+.calendar-theme .fc-event:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-1px) !important;
+  z-index: 10 !important;
+}
+
+/* More events link */
+.calendar-theme .fc-daygrid-more-link {
+  color: hsl(var(--accent)) !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  padding: 2px 6px !important;
+  background: hsl(var(--accent) / 0.1) !important;
+  border-radius: 4px !important;
+  margin-top: 2px !important;
+  transition: all 0.2s ease !important;
+}
+
+.calendar-theme .fc-daygrid-more-link:hover {
+  background: hsl(var(--accent) / 0.2) !important;
+  text-decoration: none !important;
+}
+
+/* Grid lines */
+.calendar-theme .fc-scrollgrid {
+  border-color: hsl(var(--border-color)) !important;
+  border-width: 1px !important;
+}
+
+.calendar-theme td,
+.calendar-theme th {
+  border-color: hsl(var(--border-color)) !important;
+}
+
+/* Time grid (week/day view) improvements */
+.calendar-theme .fc-timegrid-slot {
+  height: 3em !important;
+}
+
+.calendar-theme .fc-timegrid-slot-label {
+  font-size: 0.75rem !important;
+  color: hsl(var(--secondary-text)) !important;
+}
+
+/* List view improvements */
+.calendar-theme .fc-list-event:hover td {
+  background: hsl(var(--accent) / 0.05) !important;
+}
+
+.calendar-theme .fc-list-day-cushion {
+  background: hsl(var(--accent) / 0.1) !important;
+  color: hsl(var(--primary-text)) !important;
+  font-weight: 700 !important;
+}
+
+/* Loading state */
+.calendar-theme .fc .fc-spinner {
+  border-color: hsl(var(--accent)) transparent transparent !important;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .calendar-theme .fc-daygrid-day-number {
+    font-size: 0.75rem !important;
+    padding: 2px 4px !important;
+  }
+  
+  .calendar-theme .fc-event-title {
+    font-size: 0.65rem !important;
+  }
+  
+  .calendar-theme .fc-col-header-cell {
+    font-size: 0.75rem !important;
+    padding: 8px 4px !important;
+  }
+}
+
+/* Smooth animations for calendar interactions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calendar-theme .fc-event {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Pulse animation for today's date */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(211, 159, 40, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(211, 159, 40, 0);
+  }
+}
+
+.calendar-theme .fc-day-today {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Hover effects for day cells */
+.calendar-theme .fc-daygrid-day:not(.fc-day-disabled) {
+  cursor: pointer;
+}
+
+.calendar-theme .fc-daygrid-day:not(.fc-day-disabled):hover .fc-daygrid-day-frame {
+  background: rgba(211, 159, 40, 0.03) !important;
+  transition: background 0.2s ease;
+}
+
+/* Loading state animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fc-spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+/* Improve popover/tooltip styling */
+.fc-popover {
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid hsl(var(--border-color)) !important;
+}
+
+.fc-popover-header {
+  background: hsl(var(--accent)) !important;
+  color: white !important;
+  font-weight: 700 !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.fc-popover-body {
+  padding: 8px !important;
+}
+
+/* Event dragging feedback */
+.fc-event-dragging {
+  opacity: 0.7 !important;
+  cursor: move !important;
+}
+
+/* Print styles */
+@media print {
+  .calendar-theme .fc-event {
+    page-break-inside: avoid;
+  }
+  
+  .calendar-theme .fc-toolbar {
+    display: none !important;
+  }
+}

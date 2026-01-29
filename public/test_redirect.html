@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="">
+    <title>Test Login Redirect</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, button { padding: 10px; width: 100%; box-sizing: border-box; }
+        button { background: #007cba; color: white; border: none; cursor: pointer; }
+        button:hover { background: #005a8b; }
+        .result { margin: 20px 0; padding: 15px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>Test Login Redirect Functionality</h1>
+    <p>This page tests the login redirect without Firebase authentication.</p>
+
+    <div id="result" class="result" style="display: none;"></div>
+
+    <form id="test-form">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="test@example.com" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" value="testpass" required>
+        </div>
+
+        <div class="form-group">
+            <label for="user_type">User Type:</label>
+            <select id="user_type" name="user_type" required>
+                <option value="">Select User Type</option>
+                <option value="admin" selected>Admin</option>
+                <option value="staff">Staff</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" id="ajax-btn">Test AJAX Login (Should Redirect)</button>
+        </div>
+    </form>
+
+    <div style="margin-top: 20px;">
+        <form id="regular-form" action="/test-login-redirect" method="POST">
+            <div class="form-group">
+                <button type="submit">Test Regular Form Submit (Should Redirect)</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Test AJAX login (like our actual login form)
+        document.getElementById('test-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing AJAX login...';
+            
+            const formData = new FormData();
+            formData.append('email', document.getElementById('email').value);
+            formData.append('password', document.getElementById('password').value);
+            formData.append('user_type', document.getElementById('user_type').value);
+            
+            fetch('/test-login-redirect', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data);
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = 'Success! Redirecting to: ' + data.redirect;
+                    
+                    // Test the redirect
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 2000);
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = 'Error: ' + (data.message || 'Unknown error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Network error: ' + error.message;
+            });
+        });
+
+        // Set up CSRF token (get it from meta tag if available)
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        if (csrfToken) {
+            // Add CSRF token to forms if available
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                if (form.id === 'regular-form') {
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = csrfToken.getAttribute('content');
+                    form.appendChild(csrfInput);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

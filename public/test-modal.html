@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Modal - Radio Buttons</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/export-modal.css">
+    <style>
+        /* Tailwind sr-only class */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        .peer:checked ~ * {
+            --tw-border-opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-4">Radio Button Test</h1>
+        <button onclick="openTestModal()" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600">
+            Open Modal
+        </button>
+        
+        <!-- Modal -->
+        <div id="testModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6" onclick="event.stopPropagation()">
+                <h2 class="text-2xl font-bold mb-6">Export Format Test</h2>
+                
+                <!-- Format Selection -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold mb-3">Export Format</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <!-- PDF Option -->
+                        <label class="relative flex flex-col items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-red-400 hover:bg-red-50">
+                            <input type="radio" name="exportFormat" value="pdf" class="sr-only peer" checked>
+                            <div class="w-14 h-14 rounded-xl bg-red-50 flex items-center justify-center mb-3">
+                                <span class="text-2xl">📄</span>
+                            </div>
+                            <span class="text-sm font-bold">PDF</span>
+                            <div class="absolute top-3 right-3 w-6 h-6 border-2 border-gray-300 rounded-full peer-checked:border-red-500 peer-checked:bg-red-500 flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                        </label>
+
+                        <!-- Excel Option -->
+                        <label class="relative flex flex-col items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-green-400 hover:bg-green-50">
+                            <input type="radio" name="exportFormat" value="excel" class="sr-only peer">
+                            <div class="w-14 h-14 rounded-xl bg-green-50 flex items-center justify-center mb-3">
+                                <span class="text-2xl">📊</span>
+                            </div>
+                            <span class="text-sm font-bold">Excel</span>
+                            <div class="absolute top-3 right-3 w-6 h-6 border-2 border-gray-300 rounded-full peer-checked:border-green-500 peer-checked:bg-green-500 flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                        </label>
+
+                        <!-- CSV Option -->
+                        <label class="relative flex flex-col items-center p-4 border-2 border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50">
+                            <input type="radio" name="exportFormat" value="csv" class="sr-only peer">
+                            <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
+                                <span class="text-2xl">📋</span>
+                            </div>
+                            <span class="text-sm font-bold">CSV</span>
+                            <div class="absolute top-3 right-3 w-6 h-6 border-2 border-gray-300 rounded-full peer-checked:border-blue-500 peer-checked:bg-blue-500 flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="mb-4 p-4 bg-gray-100 rounded">
+                    <p class="font-semibold">Selected Format: <span id="selectedFormat">pdf</span></p>
+                </div>
+                
+                <div class="flex justify-end space-x-3">
+                    <button onclick="closeTestModal()" class="px-4 py-2 border-2 border-gray-300 rounded-lg hover:bg-gray-100">
+                        Cancel
+                    </button>
+                    <button onclick="testExport()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function openTestModal() {
+            console.log('Opening test modal');
+            const modal = document.getElementById('testModal');
+            modal.classList.remove('hidden');
+            
+            // Add change listeners to radio buttons
+            document.querySelectorAll('input[name="exportFormat"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    console.log('Radio changed:', this.value);
+                    document.getElementById('selectedFormat').textContent = this.value;
+                });
+            });
+        }
+        
+        function closeTestModal() {
+            console.log('Closing test modal');
+            document.getElementById('testModal').classList.add('hidden');
+        }
+        
+        function testExport() {
+            const format = document.querySelector('input[name="exportFormat"]:checked')?.value;
+            console.log('Export clicked. Format:', format);
+            alert('Export format: ' + (format || 'NONE SELECTED'));
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('testModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTestModal();
+            }
+        });
+    </script>
+</body>
+</html>

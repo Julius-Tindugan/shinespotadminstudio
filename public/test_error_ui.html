@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Authentication Error Handling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-2xl font-bold mb-4">Test Authentication Error UI</h1>
+    
+    <!-- Error Message Container -->
+    <div id="error-message" class="hidden mb-4 rounded-lg border-l-4 shadow-sm transition-all duration-300 ease-in-out" role="alert" aria-live="assertive" aria-atomic="true" tabindex="0" aria-describedby="error-description">
+        <div class="p-4">
+            <div class="flex items-start">
+                <div id="error-icon" class="flex-shrink-0 w-6 h-6 mr-3 mt-0.5" aria-hidden="true"></div>
+                <div class="flex-1">
+                    <div id="error-title" class="font-semibold text-sm mb-1" role="heading" aria-level="3"></div>
+                    <div id="error-description" class="text-sm opacity-90"></div>
+                    <div id="error-actions" class="mt-3 hidden" role="group" aria-label="Error recovery actions">
+                        <!-- Action buttons will be inserted here -->
+                    </div>
+                </div>
+                <button id="error-dismiss" type="button" class="flex-shrink-0 ml-3 p-1 rounded-md hover:bg-black hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-offset-1 transition-colors" aria-label="Dismiss error message">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Test Buttons -->
+    <div class="space-x-2">
+        <button onclick="testEmailError()" class="bg-red-500 text-white px-4 py-2 rounded">Test Email Not Found</button>
+        <button onclick="testPasswordError()" class="bg-orange-500 text-white px-4 py-2 rounded">Test Invalid Password</button>
+        <button onclick="testUserTypeError()" class="bg-yellow-500 text-white px-4 py-2 rounded">Test User Type Mismatch</button>
+        <button onclick="testSystemError()" class="bg-gray-500 text-white px-4 py-2 rounded">Test System Error</button>
+    </div>
+
+    <script>
+        // Copy the exact error handling functions from login.blade.php
+        const errorMessage = document.getElementById('error-message');
+        
+        function handleAuthenticationError(data) {
+            const errorType = data.error_type || 'unknown';
+            const message = data.message || 'Login failed. Please check your credentials.';
+            const attempts = data.attempts || 0;
+            
+            // Define error configurations
+            const errorConfigs = {
+                'email_not_found': {
+                    type: 'validation',
+                    title: 'Email Not Found',
+                    icon: 'email',
+                    field: 'email',
+                    severity: 'error',
+                    actions: ['forgot_password', 'register']
+                },
+                'invalid_password': {
+                    type: 'authentication', 
+                    title: 'Incorrect Password',
+                    icon: 'password',
+                    field: 'password',
+                    severity: 'error',
+                    actions: ['forgot_password']
+                },
+                'user_type_mismatch': {
+                    type: 'validation',
+                    title: 'Wrong Account Type',
+                    icon: 'user_type',
+                    field: 'user_type',
+                    severity: 'warning',
+                    actions: []
+                },
+                'system_error': {
+                    type: 'system',
+                    title: 'System Error',
+                    icon: 'system',
+                    field: null,
+                    severity: 'error',
+                    actions: ['retry', 'contact_support']
+                }
+            };
+            
+            const config = errorConfigs[errorType] || {
+                type: 'general',
+                title: 'Login Error',
+                icon: 'general',
+                field: null,
+                severity: 'error',
+                actions: ['retry']
+            };
+            
+            console.log('Error Type:', errorType);
+            console.log('Config:', config);
+            console.log('Message:', message);
+            
+            showError(message, config, attempts);
+        }
+        
+        function showError(message, config, attempts = 0) {
+            console.log('showError called with:', { message, config, attempts });
+            
+            const errorIcon = document.getElementById('error-icon');
+            const errorTitle = document.getElementById('error-title');
+            const errorDescription = document.getElementById('error-description');
+            const errorActions = document.getElementById('error-actions');
+            
+            // Define visual themes
+            const themes = {
+                error: {
+                    border: 'border-red-400',
+                    bg: 'bg-red-50',
+                    titleColor: 'text-red-800',
+                    textColor: 'text-red-700',
+                    iconColor: 'text-red-500'
+                },
+                warning: {
+                    border: 'border-orange-400', 
+                    bg: 'bg-orange-50',
+                    titleColor: 'text-orange-800',
+                    textColor: 'text-orange-700',
+                    iconColor: 'text-orange-500'
+                },
+                info: {
+                    border: 'border-blue-400',
+                    bg: 'bg-blue-50', 
+                    titleColor: 'text-blue-800',
+                    textColor: 'text-blue-700',
+                    iconColor: 'text-blue-500'
+                }
+            };
+            
+            // Define icons
+            const icons = {
+                email: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>',
+                password: '<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>',
+                user_type: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path></svg>',
+                system: '<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>',
+                general: '<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>'
+            };
+            
+            // Apply theme
+            const theme = themes[config.severity] || themes.error;
+            errorMessage.className = `mb-4 rounded-lg border-l-4 shadow-sm transition-all duration-300 ease-in-out ${theme.border} ${theme.bg}`;
+            
+            // Set icon
+            errorIcon.innerHTML = icons[config.icon] || icons.general;
+            errorIcon.className = `flex-shrink-0 w-6 h-6 mr-3 mt-0.5 ${theme.iconColor}`;
+            
+            // Set title
+            errorTitle.textContent = config.title;
+            errorTitle.className = `font-semibold text-sm mb-1 ${theme.titleColor}`;
+            
+            // Set description
+            errorDescription.textContent = message;
+            errorDescription.className = `text-sm ${theme.textColor} opacity-90`;
+            
+            // Show error
+            errorMessage.classList.remove('hidden');
+        }
+        
+        // Test functions
+        function testEmailError() {
+            handleAuthenticationError({
+                error_type: 'email_not_found',
+                message: 'No admin account found with this email address. Please verify your credentials or contact support.'
+            });
+        }
+        
+        function testPasswordError() {
+            handleAuthenticationError({
+                error_type: 'invalid_password',
+                message: 'The password you entered is incorrect. Please check your password and try again.',
+                attempts: 2
+            });
+        }
+        
+        function testUserTypeError() {
+            handleAuthenticationError({
+                error_type: 'user_type_mismatch',
+                message: 'This email is registered as an admin account. Please select "Admin" as your login type.'
+            });
+        }
+        
+        function testSystemError() {
+            handleAuthenticationError({
+                error_type: 'system_error',
+                message: 'A system error occurred during login. Please try again or contact support if the issue persists.'
+            });
+        }
+        
+        // Dismiss functionality
+        document.getElementById('error-dismiss').addEventListener('click', function() {
+            errorMessage.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
